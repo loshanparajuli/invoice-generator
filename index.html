@@ -11,12 +11,33 @@
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
 </head>
 <body>
+
+  <!-- ===================== MODE SELECT MODAL ===================== -->
+  <div class="mode-overlay" id="mode-overlay">
+    <div class="mode-modal">
+      <div class="mode-modal-title">How do you wish to use this?</div>
+      <div class="mode-modal-sub">fromSilicon &middot; Invoice Maker</div>
+      <div class="mode-options">
+        <button class="mode-option" type="button" data-mode="internal">
+          <div class="mode-option-title">Internal</div>
+          <div class="mode-option-desc">Use this if you are a contractor at fromSilicon.</div>
+        </button>
+        <button class="mode-option" type="button" data-mode="external">
+          <div class="mode-option-title">External</div>
+        </button>
+      </div>
+    </div>
+  </div>
+
 <div class="app">
 
   <!-- ===================== CONTROL PANEL ===================== -->
   <aside class="panel">
     <h1>Invoice Maker</h1>
-    <div class="sub">fromSilicon &middot; generator</div>
+    <div class="sub-row">
+      <div class="sub">fromSilicon &middot; generator</div>
+      <button class="mode-switch" id="btn-switch-mode" type="button">Switch mode</button>
+    </div>
 
     <div class="section">
       <div class="section-title">From</div>
@@ -27,6 +48,10 @@
       <div class="field">
         <label>Subtitle</label>
         <input type="text" id="f-fromSub" placeholder="on behalf of fromSilicon">
+      </div>
+      <div class="field internal-only">
+        <label>PAN Number</label>
+        <input type="text" id="f-pan" placeholder="601234567">
       </div>
     </div>
 
@@ -40,6 +65,7 @@
         <label>Client Role / Company</label>
         <input type="text" id="f-billSub" placeholder="Founder &amp; MP at fromSilicon LLC">
       </div>
+      <div class="hint internal-only" id="billed-to-fixed-hint">Fixed for internal invoices.</div>
     </div>
 
     <div class="section">
@@ -63,6 +89,7 @@
         <div class="field">
           <label>Due Date</label>
           <input type="date" id="f-dueDate">
+          <div class="hint internal-only" id="due-date-hint">Auto-set to the nearest Wednesday (payday).</div>
         </div>
       </div>
     </div>
@@ -75,7 +102,7 @@
       <button class="btn add-item-btn" id="btn-add-item" type="button">+ Add Project / Line Item</button>
     </div>
 
-    <div class="section">
+    <div class="section external-only" id="section-tax">
       <div class="section-title">Tax</div>
       <div class="row-2">
         <div class="field">
@@ -95,10 +122,11 @@
         <label>Terms</label>
         <textarea id="f-terms"></textarea>
       </div>
-      <div class="field">
+      <div class="field external-only" id="field-remittance-wrap">
         <label>Remittance</label>
         <textarea id="f-remittance"></textarea>
       </div>
+      <div class="hint internal-only">Prices are inclusive of tax &mdash; noted automatically on the invoice.</div>
     </div>
 
     <div class="export-bar">
@@ -116,7 +144,7 @@
       <div class="letterhead">
         <div class="brand">
           <div class="brand-mark">
-            <img src="assets/logo-dots.png" alt="fromSilicon" width="52" height="52">
+            <img src="assets/logo.png" alt="fromSilicon" width="64" height="64">
           </div>
           <div>
             <div class="brand-name"><span class="light">from</span><span class="bold">Silicon</span></div>
@@ -155,6 +183,7 @@
           <div class="meta-person">
             <span id="p-fromName">Loshan Parajuli</span><br>
             <span class="role" id="p-fromSub">on behalf of fromSilicon</span>
+            <div class="role internal-only" id="p-fromPan"></div>
           </div>
         </div>
       </div>
@@ -174,7 +203,7 @@
 
       <div class="items-body" id="items-body"></div>
 
-      <div class="totals-wrap">
+      <div class="totals-wrap external-only" id="p-totals-wrap">
         <div class="totals">
           <div class="totals-row">
             <span class="totals-label">Subtotal</span>
@@ -191,7 +220,7 @@
         <div class="ht-dots dots-fade"></div>
         <div class="total-due-left">
           <div class="total-due-label">Total Due</div>
-          <div class="total-due-sub">Payable upon receipt &middot; USD</div>
+          <div class="total-due-sub" id="p-totalDueSub">Payable upon receipt &middot; USD</div>
         </div>
         <div class="total-due-right">
           <div class="total-due-amount" id="p-total">$0.00</div>
@@ -210,9 +239,13 @@
           <div class="notes-label">Terms</div>
           <div class="notes-text" id="p-terms"></div>
         </div>
-        <div>
+        <div class="external-only" id="p-remittance-col">
           <div class="notes-label">Remittance</div>
           <div class="notes-text" id="p-remittance"></div>
+        </div>
+        <div class="internal-only" id="p-taxnote-col">
+          <div class="notes-label">Payment Note</div>
+          <div class="notes-text">All prices listed above are inclusive of applicable taxes.</div>
         </div>
       </div>
 

@@ -26,6 +26,92 @@ html, body {
   background-position: center;
 }
 
+/* ---------- Mode select modal ---------- */
+.mode-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 20, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.mode-overlay.hidden { display: none; }
+
+.mode-modal {
+  background: var(--paper);
+  border-radius: 8px;
+  padding: 32px 30px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+}
+
+.mode-modal-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 21px;
+  color: var(--ink);
+}
+
+.mode-modal-sub {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gray-3);
+  margin-top: 4px;
+  margin-bottom: 22px;
+}
+
+.mode-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mode-option {
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.mode-option:hover {
+  border-color: var(--ink);
+}
+
+.mode-option-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.mode-option-title:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.mode-option-desc {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--gray-2);
+}
+
+/* While the mode overlay is open (first load, or "Switch mode"), keep the app inert behind it */
+.mode-overlay:not(.hidden) ~ .app {
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+body.mode-external .internal-only { display: none !important; }
+body.mode-internal .external-only { display: none !important; }
+
 /* ---------- App shell ---------- */
 .app {
   display: flex;
@@ -52,13 +138,37 @@ html, body {
   color: #f2f0ec;
 }
 
+.sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 26px;
+}
+
 .panel .sub {
   font-family: var(--mono);
   font-size: 9.5px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #8a8a8a;
-  margin-bottom: 26px;
+}
+
+.mode-switch {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid #3d3d3d;
+  color: #9a9a9a;
+  border-radius: 3px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.mode-switch:hover {
+  color: #f2f0ec;
+  border-color: #8a8a8a;
 }
 
 .section {
@@ -115,6 +225,12 @@ html, body {
 .field input:focus,
 .field textarea:focus {
   border-color: #8a8a8a;
+}
+
+.field input:disabled {
+  color: #9a9a9a;
+  background: #222;
+  cursor: not-allowed;
 }
 
 .field textarea {
@@ -296,12 +412,15 @@ html, body {
 .brand {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
 }
 
+/* The logo art sits inside ~10% transparent padding, so the box runs larger
+   than the old mark to land at the same optical size next to the wordmark. */
 .brand-mark {
-  width: 52px;
-  height: 52px;
+  width: 64px;
+  height: 64px;
+  margin-left: -6px;
   flex: none;
 }
 
@@ -309,6 +428,7 @@ html, body {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: contain;
 }
 
 .brand-name {
