@@ -281,3 +281,16 @@ convenience, swap this for a real random secret in an env var instead.
   - **Commit policy**: user asked that Claude never be added as a co-author on commits
     in this repo — saved as a standing memory; this and all future commits omit any
     Co-Authored-By trailer.
+- 2026-07-18 — Sixth polish round:
+  - **Removed the Unsplash backdrop entirely** (user reported not seeing it — rather
+    than debug why, just cut it per their "if we're not using this, delete it" call).
+    Deleted `public/invoice-backdrop.jpg`, the `.stage::before` rule, and the
+    now-unnecessary `position/z-index` on `.page-wrap` that existed only to stack
+    above it. The small rotated `.mode-side-label` (Internal/External) is unrelated
+    and stays.
+  - **Home page made boxy**: `.home-page` lost its `border-radius: 10px`, gained a
+    2px `--ink` border, matching Invoice/Timesheet's black-box language.
+  - **Added a "Powered by fromSilicon" link** below the home page card (same pattern
+    as Invoice Maker's, but with a `.home-wrap .powered-by` color override since the
+    original pale color was tuned for the dark `--desk` backdrop, not this page's
+    white background).

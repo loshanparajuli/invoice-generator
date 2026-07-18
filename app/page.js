@@ -46,6 +46,11 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
+      <div className="powered-by">
+        <a href="https://fromsilicon.com/?utm_source=invoice_maker&utm_medium=app&utm_campaign=powered_by" target="_blank" rel="noopener noreferrer">
+          Powered by fromSilicon
+        </a>
+      </div>
     </div>
   );
 }
