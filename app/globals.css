@@ -987,6 +987,50 @@ body.mode-internal .external-only { display: none !important; }
   margin-bottom: 8px;
 }
 
+/* Mobile: the two-pane-style letterhead (brand left, big doc-title right) and
+   2-column row-2 grids were designed for Invoice Maker's 816px desktop paper —
+   on a real phone width they don't fit and force horizontal scroll. This is the
+   tool meant to be handed to someone on their phone, so it gets a dedicated
+   narrow-viewport layout rather than just shrinking the desktop one. */
+@media (max-width: 480px) {
+  .ts-wrap {
+    padding: 24px 12px;
+  }
+
+  .ts-page {
+    padding: 28px 20px 36px;
+  }
+
+  .ts-page .letterhead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .ts-page .doc-id {
+    text-align: left;
+  }
+
+  .ts-page .doc-title {
+    font-size: 26px;
+  }
+
+  .light-form .row-2,
+  .break-card .row-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .review-wrap {
+    padding: 20px 14px 32px;
+  }
+
+  .review-header .brand-mark {
+    width: 52px;
+    height: 52px;
+  }
+}
+
 .back-link-light {
   font-family: var(--mono);
   font-size: 9px;

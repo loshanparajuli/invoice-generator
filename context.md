@@ -294,3 +294,21 @@ convenience, swap this for a real random secret in an env var instead.
     as Invoice Maker's, but with a `.home-wrap .powered-by` color override since the
     original pale color was tuned for the dark `--desk` backdrop, not this page's
     white background).
+- 2026-07-18 — Seventh polish round: **fixed real mobile overflow on Timesheet**
+  (flagged as critical — this is the tool meant to be handed to someone on a phone).
+  Root cause, confirmed by emulating an iPhone 13 viewport and measuring
+  `document.documentElement.scrollWidth` vs `clientWidth` (404px content in a 390px
+  viewport before the fix): `.letterhead`'s desktop layout (brand block left, big
+  40px `.doc-title` right, side by side) was designed for Invoice Maker's 816px paper
+  and simply doesn't fit next to "Timesheet" at phone widths — it was pushing the
+  page wider than the viewport. Added a `@media (max-width: 480px)` block scoped to
+  `.ts-page`/`.ts-wrap`/`.review-wrap` only (Invoice Maker's desktop-oriented layout
+  is untouched, confirmed by re-testing it after this change):
+  - `.ts-page .letterhead` stacks (brand block above, title below, left-aligned)
+    instead of side-by-side; `.doc-title` drops to 26px in this context.
+  - `.light-form .row-2` and `.break-card .row-2` (Client Name/Nature of Shoot,
+    Start/End Time, break Start/End) collapse from 2 columns to 1.
+  - Tightened `.ts-wrap`/`.ts-page`/`.review-wrap` padding to reclaim width.
+  Verified zero horizontal overflow at both 390px and 360px viewport widths, and
+  confirmed the signature pad correctly captures a real dispatched `TouchEvent`
+  sequence (not just mouse events) and properly enables "Approve & Send for Invoice".
