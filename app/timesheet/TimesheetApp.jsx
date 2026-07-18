@@ -340,7 +340,7 @@ export default function TimesheetApp() {
           </div>
           <div className="row-2">
             <div className="field">
-              <label>Start Time</label>
+              <label>Start Time (24hr, HH:MM)</label>
               <input
                 type="text"
                 inputMode="numeric"
@@ -351,7 +351,7 @@ export default function TimesheetApp() {
               />
             </div>
             <div className="field">
-              <label>End Time</label>
+              <label>End Time (24hr, HH:MM)</label>
               <input
                 type="text"
                 inputMode="numeric"
@@ -374,7 +374,7 @@ export default function TimesheetApp() {
               </div>
               <div className="row-2">
                 <div className="field">
-                  <label>Start</label>
+                  <label>Start (24hr)</label>
                   <input
                     type="text"
                     inputMode="numeric"
@@ -385,7 +385,7 @@ export default function TimesheetApp() {
                   />
                 </div>
                 <div className="field">
-                  <label>End</label>
+                  <label>End (24hr)</label>
                   <input
                     type="text"
                     inputMode="numeric"

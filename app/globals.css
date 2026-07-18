@@ -185,28 +185,6 @@ body.mode-internal .external-only { display: none !important; }
   color: #8a8a8a;
 }
 
-.mode-pill {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  font-family: var(--mono);
-  font-size: 8.5px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  vertical-align: middle;
-}
-
-.mode-pill-internal {
-  background: #2a3f38;
-  color: #d8ede4;
-}
-
-.mode-pill-external {
-  background: #2a2a3f;
-  color: #dde0f5;
-}
-
 .back-link {
   font-family: var(--mono);
   font-size: 9px;
@@ -244,7 +222,11 @@ body.mode-internal .external-only { display: none !important; }
   border-top: 1px solid #333;
 }
 
-.section:first-of-type {
+/* :first-of-type doesn't work here — .sub-row/.letterhead (also a div) always
+   precedes the first .section, so it's never actually structurally first. Target
+   the specific sibling relationship instead. */
+.sub-row + .section,
+.letterhead + .section {
   margin-top: 0;
   padding-top: 0;
   border-top: none;
@@ -457,6 +439,7 @@ body.mode-internal .external-only { display: none !important; }
 
 /* ---------- Stage / preview ---------- */
 .stage {
+  position: relative;
   flex: 1;
   min-height: 100vh;
   display: flex;
@@ -465,10 +448,40 @@ body.mode-internal .external-only { display: none !important; }
   overflow-x: auto;
 }
 
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/invoice-backdrop.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.2;
+  z-index: 0;
+}
+
 .page-wrap {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.mode-side-label {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: left center;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #000;
+  opacity: 0.25;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .page {
@@ -1191,6 +1204,7 @@ body.mode-internal .external-only { display: none !important; }
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 24px;
 }
 
 .review-actions .btn {

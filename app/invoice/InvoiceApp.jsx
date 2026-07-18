@@ -314,14 +314,9 @@ export default function InvoiceApp() {
               <Link href="/" className="back-link">&larr; All tools</Link>
               <h1>Invoice Maker</h1>
               <div className="sub-row">
-                <div className="sub">
-                  fromSilicon &middot; generator
-                  <span className={`mode-pill ${internal ? "mode-pill-internal" : "mode-pill-external"}`}>
-                    {internal ? "Internal" : "External"}
-                  </span>
-                </div>
+                <div className="sub">fromSilicon &middot; generator</div>
                 <button className="mode-switch" type="button" onClick={toggleMode}>
-                  Switch to {internal ? "External" : "Internal"}
+                  Switch mode
                 </button>
               </div>
 
@@ -540,6 +535,7 @@ export default function InvoiceApp() {
 
             {/* ===================== PREVIEW STAGE ===================== */}
             <main className="stage">
+              <div className="mode-side-label">{internal ? "Internal" : "External"}</div>
               <div className="page-wrap">
                 <div className="page" id="invoice-page" ref={pageRef}>
                   <div className="letterhead">
@@ -649,11 +645,11 @@ export default function InvoiceApp() {
                     {internal && (
                       <div className="total-due-split">
                         <div className="split-row">
-                          <span>Service Charge &middot; 90%</span>
+                          <span>Service Charge &middot; 90% of Invoiced Value</span>
                           <span>{fmtMoney(totals.service, code)}</span>
                         </div>
                         <div className="split-row">
-                          <span>Ownership Transfer &middot; 10%</span>
+                          <span>Ownership Transfer &middot; 10% of Invoiced Value</span>
                           <span>{fmtMoney(totals.ownership, code)}</span>
                         </div>
                       </div>

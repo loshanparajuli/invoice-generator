@@ -250,3 +250,34 @@ convenience, swap this for a real random secret in an env var instead.
   - **Favicon wired up** from the `public/favicon_io/` pack (already present) via
     `app/layout.js`'s `metadata.icons` + a new `public/site.webmanifest`.
   - Removed stray `.DS_Store` files and added `.DS_Store` to `.gitignore`.
+- 2026-07-18 — Fourth polish round (Invoice Maker):
+  - Mode indicator simplified: removed the colored "Internal/External" pill and the
+    dynamic "Switch to X" button label — back to a plain "Switch mode" button (still
+    toggles directly, no modal). The mode is now shown as a small, low-opacity (0.25),
+    rotated `.mode-side-label` sitting at the left edge of the preview stage instead.
+  - **Backdrop image**: `.stage` (the area around the paper invoice) now shows
+    `public/invoice-backdrop.jpg` (a Golden Gate Bridge photo, downloaded and
+    self-hosted rather than hotlinked to Unsplash) at 20% opacity via a `::before`
+    pseudo-element, replacing the flat gray. Doesn't affect the exported PDF — that
+    only ever captures `#invoice-page`, a sibling of the backdrop layer, not a
+    descendant of it.
+  - Internal invoice's black-box split rows now read "Service Charge · 90% of Invoiced
+    Value" / "Ownership Transfer · 10% of Invoiced Value" (previously just "90%"/"10%").
+- 2026-07-18 — Fifth polish round:
+  - **Found and fixed a real CSS bug**: `.section:first-of-type` never actually matched
+    anything, in either Invoice Maker's `.panel` or Timesheet's `.ts-page` — the
+    `.sub-row`/`.letterhead` div (also a `<div>`) always structurally precedes the first
+    `.section`, so it — not the section — was `:first-of-type`. Every "first" section
+    has always rendered its `border-top` (barely visible on the dark panel, glaringly
+    visible as a stray line under Timesheet's black letterhead once the "Shoot" section
+    became first). Replaced with adjacent-sibling selectors
+    (`.sub-row + .section, .letterhead + .section`) that reliably target the actual
+    first section regardless of DOM sibling composition.
+  - Timesheet: added explicit "(24hr, HH:MM)" to the Start/End Time and break
+    Start/End labels (on top of the existing hint text) for clarity.
+  - Timesheet review screen: `.review-actions` had no `margin-top`, so the "Approve &
+    Send for Invoice" button sat flush against the footer line above it with zero
+    breathing room — added `margin-top: 24px`.
+  - **Commit policy**: user asked that Claude never be added as a co-author on commits
+    in this repo — saved as a standing memory; this and all future commits omit any
+    Co-Authored-By trailer.
