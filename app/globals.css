@@ -933,7 +933,6 @@ body.mode-internal .external-only { display: none !important; }
   gap: 20px;
   background: #fff;
   border: 1px solid var(--rule);
-  border-radius: 6px;
   padding: 20px 24px;
   text-decoration: none;
   color: var(--ink);

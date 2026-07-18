@@ -312,3 +312,29 @@ convenience, swap this for a real random secret in an env var instead.
   Verified zero horizontal overflow at both 390px and 360px viewport widths, and
   confirmed the signature pad correctly captures a real dispatched `TouchEvent`
   sequence (not just mouse events) and properly enables "Approve & Send for Invoice".
+- 2026-07-18 — Eighth round: **found and fixed a real PDF page-break bug** by
+  actually generating and reading real output PDFs (not just eyeballing the live
+  page) — extracted the exact base64 PDF from a live signed-timesheet send by
+  intercepting the `/api/send-timesheet` request in Playwright, and separately
+  downloaded a real Invoice PDF. The Timesheet PDF was spilling onto an unwanted
+  second page, and the footer line ("Timesheet · Confidential ... Independent
+  Contractor Agreement") was being **sliced in half exactly at the page boundary**
+  — this is what the user saw as "signature flowing outside the text area" /
+  "things not in line" (same root cause, would slice through whatever element
+  happens to sit at that boundary for a given document's content length).
+  - **Root cause**: `lib/pdf.js`'s `pdfOptions()` sizes the PDF page to exactly
+    `pageEl.offsetWidth`/`offsetHeight` (measured on the live DOM), but html2pdf's
+    internal clone-and-render pass measures a few px taller — with zero buffer, that
+    was enough to trigger html2pdf's default pagination (`pagebreak.mode:
+    ['css','legacy']`, which doesn't prevent mid-element slicing on its own).
+  - **Fix**: added a height buffer (`+24px`) so the declared page is reliably taller
+    than the actual rendered content, and set `pagebreak: { mode: ['avoid-all'] }`
+    as a second line of defense — if a page break is ever still needed for a much
+    longer future document, whole elements get pushed to the next page instead of
+    being cut through.
+  - This is shared code (`lib/pdf.js` is used by both Invoice Maker and Timesheet),
+    so the fix covers both. Verified by regenerating the Timesheet PDF (now single
+    page, footer fully intact) and stress-testing Invoice Maker with 6 line items
+    (also single clean page).
+  - Also removed the leftover rounded corners on the home page's tool cards
+    (`.tool-card`), matching the "boxy and sharp" direction applied everywhere else.
